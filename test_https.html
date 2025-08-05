@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTTPS Connection Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        button { margin: 5px; padding: 10px 15px; }
+    </style>
+</head>
+<body>
+    <h1>HTTPS Connection Test for inipressi.xyz</h1>
+    
+    <button onclick="testHTTPS()">Test HTTPS Connection</button>
+    <button onclick="testFormSubmit()">Test Form Submission</button>
+    
+    <div id="results"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+        function addResult(message, type) {
+            const div = document.createElement('div');
+            div.className = 'result ' + type;
+            div.innerHTML = '<strong>' + new Date().toLocaleTimeString() + '</strong>: ' + message;
+            document.getElementById('results').appendChild(div);
+        }
+
+        function testHTTPS() {
+            addResult('Testing HTTPS connection to postmailer_cors_fixed.php...', 'info');
+            
+            $.ajax({
+                url: 'https://inipressi.xyz/phpmailer/classes/postmailer_cors_fixed.php',
+                method: 'GET',
+                timeout: 10000,
+                success: function(data) {
+                    addResult('✅ HTTPS GET successful! Response: ' + JSON.stringify(data), 'success');
+                    console.log('Full response:', data);
+                },
+                error: function(xhr, status, error) {
+                    addResult('❌ HTTPS GET failed: ' + status + ' - ' + error + ' (Status: ' + xhr.status + ')', 'error');
+                    console.log('Error details:', xhr);
+                }
+            });
+        }
+
+        function testFormSubmit() {
+            addResult('Testing HTTPS POST to postmailer_cors_fixed.php...', 'info');
+            
+            $.ajax({
+                url: 'https://inipressi.xyz/phpmailer/classes/postmailer_cors_fixed.php',
+                method: 'POST',
+                data: {
+                    email: 'test@example.com',
+                    password: 'test123'
+                },
+                timeout: 10000,
+                success: function(data) {
+                    addResult('✅ HTTPS POST successful! Response: ' + JSON.stringify(data), 'success');
+                    console.log('Full response:', data);
+                },
+                error: function(xhr, status, error) {
+                    addResult('❌ HTTPS POST failed: ' + status + ' - ' + error + ' (Status: ' + xhr.status + ')', 'error');
+                    console.log('Error details:', xhr);
+                }
+            });
+        }
+
+        // Auto-test on load
+        setTimeout(testHTTPS, 1000);
+    </script>
+</body>
+</html>
