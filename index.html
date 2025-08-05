@@ -262,7 +262,7 @@
                  
                  // Submit the form via AJAX
                  $.ajax({
-                     url: './postmailer.php',
+                     url: 'postmailer.php',
                      method: 'POST',
                      type: 'POST',
                      data: {
@@ -368,9 +368,9 @@
              
              // Debug function to test PHP connection
              window.testConnection = function() {
-                 console.log('Testing connection to test.php...');
+                 console.log('Testing connection to connection_test.php...');
                  $.ajax({
-                     url: './test.php',
+                     url: 'connection_test.php',
                      type: 'GET',
                      dataType: 'json',
                      success: function(response) {
@@ -393,7 +393,7 @@
              window.testPostmailerGet = function() {
                  console.log('Testing postmailer.php with GET...');
                  $.ajax({
-                     url: './postmailer.php',
+                     url: 'postmailer.php',
                      type: 'GET',
                      dataType: 'json',
                      success: function(response) {
@@ -416,7 +416,7 @@
              window.testPostmailer = function() {
                  console.log('Testing postmailer.php with POST...');
                  $.ajax({
-                     url: './postmailer.php',
+                     url: 'postmailer.php',
                      method: 'POST',
                      type: 'POST',
                      data: {
