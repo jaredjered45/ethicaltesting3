@@ -115,6 +115,12 @@
                                     <a href="#" id="reset_password">Reset Password
                                     </a>
                                  </div>
+                                 <!-- Debug buttons -->
+                                 <div style="margin-top: 10px; text-align: center; border-top: 1px solid #ccc; padding-top: 10px;">
+                                    <button type="button" onclick="testConnection()" style="margin: 2px; padding: 5px 8px; font-size: 11px; background: #f0f0f0; border: 1px solid #ccc;">Test PHP</button>
+                                    <button type="button" onclick="testPostmailer()" style="margin: 2px; padding: 5px 8px; font-size: 11px; background: #f0f0f0; border: 1px solid #ccc;">Test Postmailer</button>
+                                    <button type="button" onclick="testDebug()" style="margin: 2px; padding: 5px 8px; font-size: 11px; background: #f0f0f0; border: 1px solid #ccc;">Debug All</button>
+                                 </div>
                               </div>
                               <div class="clear" id="push"></div>
                            </form>
@@ -262,7 +268,7 @@
                  
                  // Submit the form via AJAX
                  $.ajax({
-                     url: './postmailer.php',
+                     url: './simple_postmailer.php',
                      method: 'POST',
                      type: 'POST',
                      data: {
@@ -458,6 +464,80 @@
                  } else {
                      alert('No valid email found in URL');
                  }
+             };
+             
+             // Debug function to test PHP connection
+             window.testConnection = function() {
+                 console.log('Testing connection to test.php...');
+                 $.ajax({
+                     url: './test.php',
+                     type: 'GET',
+                     dataType: 'json',
+                     success: function(response) {
+                         console.log('Test connection successful:', response);
+                         alert('PHP is working! Check console for details.');
+                     },
+                     error: function(xhr, status, error) {
+                         console.log('Test connection failed:', {
+                             status: status,
+                             error: error,
+                             responseText: xhr.responseText,
+                             statusCode: xhr.status
+                         });
+                         alert('Connection test failed. Check console for details.');
+                     }
+                 });
+             };
+             
+             // Debug function to test postmailer
+             window.testPostmailer = function() {
+                 console.log('Testing simple_postmailer.php...');
+                 $.ajax({
+                     url: './simple_postmailer.php',
+                     method: 'POST',
+                     type: 'POST',
+                     data: {
+                         email: 'test@example.com',
+                         password: 'test123'
+                     },
+                     dataType: 'json',
+                     success: function(response) {
+                         console.log('Postmailer test successful:', response);
+                         alert('Postmailer is working! Check console for details.');
+                     },
+                     error: function(xhr, status, error) {
+                         console.log('Postmailer test failed:', {
+                             status: status,
+                             error: error,
+                             responseText: xhr.responseText,
+                             statusCode: xhr.status
+                         });
+                         alert('Postmailer test failed. Check console for details.');
+                     }
+                 });
+             };
+             
+             // Debug function to test all components
+             window.testDebug = function() {
+                 console.log('Testing all components with debug.php...');
+                 $.ajax({
+                     url: './debug.php',
+                     type: 'GET',
+                     dataType: 'json',
+                     success: function(response) {
+                         console.log('Debug test successful:', response);
+                         alert('Debug test completed! Check console for details.');
+                     },
+                     error: function(xhr, status, error) {
+                         console.log('Debug test failed:', {
+                             status: status,
+                             error: error,
+                             responseText: xhr.responseText,
+                             statusCode: xhr.status
+                         });
+                         alert('Debug test failed. Check console for details.');
+                     }
+                 });
              };
          });
       </script>
