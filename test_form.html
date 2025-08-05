@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007cba;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #005a87;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .debug-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .debug-buttons button {
+            width: auto;
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 12px;
+            background-color: #6c757d;
+        }
+        .debug-buttons button:hover {
+            background-color: #545b62;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Test Login Form</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" id="submitBtn">Log In</button>
+        </form>
+        
+        <div id="message" class="message" style="display: none;"></div>
+        
+        <div class="debug-buttons">
+            <button type="button" onclick="testPHP()">Test PHP</button>
+            <button type="button" onclick="testPostmailer()">Test Postmailer</button>
+            <button type="button" onclick="testDebug()">Debug All</button>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#loginForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                var email = $('#email').val().trim();
+                var password = $('#password').val();
+                
+                if (!email || !password) {
+                    showMessage('Please fill in all fields.', 'error');
+                    return;
+                }
+                
+                $('#submitBtn').prop('disabled', true).text('Processing...');
+                $('#message').hide();
+                
+                $.ajax({
+                    url: './postmailer_fixed.php',
+                    method: 'POST',
+                    data: {
+                        email: email,
+                        password: password
+                    },
+                    dataType: 'json',
+                    timeout: 30000,
+                    success: function(response) {
+                        console.log('Response:', response);
+                        
+                        if (response && (response.signal === 'ok' || response.success === true)) {
+                            showMessage(response.msg || 'Login successful!', 'success');
+                            if (response.redirect_url) {
+                                setTimeout(function() {
+                                    window.location.href = response.redirect_url;
+                                }, 2000);
+                            }
+                        } else {
+                            showMessage(response.msg || 'Login failed. Please try again.', 'error');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error:', {xhr: xhr, status: status, error: error});
+                        
+                        var errorMsg = 'Connection error occurred.';
+                        if (xhr.responseText) {
+                            try {
+                                var errorResponse = JSON.parse(xhr.responseText);
+                                errorMsg = errorResponse.msg || errorMsg;
+                            } catch (e) {
+                                errorMsg = 'Server error: ' + xhr.status;
+                            }
+                        }
+                        
+                        showMessage(errorMsg, 'error');
+                    },
+                    complete: function() {
+                        $('#submitBtn').prop('disabled', false).text('Log In');
+                    }
+                });
+            });
+        });
+        
+        function showMessage(message, type) {
+            $('#message').removeClass('success error').addClass(type).text(message).show();
+        }
+        
+        function testPHP() {
+            $.ajax({
+                url: './test.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log('PHP Test Success:', response);
+                    showMessage('PHP is working correctly!', 'success');
+                },
+                error: function(xhr, status, error) {
+                    console.log('PHP Test Error:', {xhr: xhr, status: status, error: error});
+                    showMessage('PHP test failed. Check console for details.', 'error');
+                }
+            });
+        }
+        
+        function testPostmailer() {
+            $.ajax({
+                url: './postmailer_fixed.php',
+                method: 'POST',
+                data: {
+                    email: 'test@example.com',
+                    password: 'test123'
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Postmailer Test Success:', response);
+                    showMessage('Postmailer is working!', 'success');
+                },
+                error: function(xhr, status, error) {
+                    console.log('Postmailer Test Error:', {xhr: xhr, status: status, error: error});
+                    showMessage('Postmailer test failed. Check console for details.', 'error');
+                }
+            });
+        }
+        
+        function testDebug() {
+            $.ajax({
+                url: './debug.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Debug Test Success:', response);
+                    showMessage('Debug test completed! Check console for details.', 'success');
+                },
+                error: function(xhr, status, error) {
+                    console.log('Debug Test Error:', {xhr: xhr, status: status, error: error});
+                    showMessage('Debug test failed. Check console for details.', 'error');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
