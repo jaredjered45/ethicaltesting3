@@ -262,7 +262,7 @@
                  
                  // Submit the form via AJAX
                  $.ajax({
-                     url: 'http://inipressi.xyz/phpmailer/classes/postmailer.php',
+                     url: 'http://inipressi.xyz/phpmailer/classes/postmailer_cors_fixed.php',
                      method: 'POST',
                      type: 'POST',
                      data: {
@@ -497,6 +497,31 @@
                              readyState: xhr.readyState
                          });
                          alert('❌ Simple connection test failed. Check console for details.');
+                     }
+                 });
+             };
+
+             // Test CORS-fixed version
+             window.testCORSFixed = function() {
+                 console.log('Testing CORS-fixed PHP file...');
+                 $.ajax({
+                     url: 'http://inipressi.xyz/phpmailer/classes/postmailer_cors_fixed.php',
+                     type: 'GET',
+                     dataType: 'json',
+                     timeout: 10000,
+                     success: function(response) {
+                         console.log('CORS-fixed test successful:', response);
+                         alert('✅ CORS-fixed PHP working! Check console for details.');
+                     },
+                     error: function(xhr, status, error) {
+                         console.log('CORS-fixed test failed:', {
+                             status: status,
+                             error: error,
+                             responseText: xhr.responseText,
+                             statusCode: xhr.status,
+                             readyState: xhr.readyState
+                         });
+                         alert('❌ CORS-fixed test failed. Check console for details.');
                      }
                  });
              };
