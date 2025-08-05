@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Connectivity Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .warning { background-color: #fff3cd; color: #856404; }
+        button { margin: 5px; padding: 10px 15px; }
+        #results { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Server Connectivity Diagnostic Tool</h1>
+    
+    <div>
+        <button onclick="testBasicConnection()">1. Test Basic Connection</button>
+        <button onclick="testWithHTTPS()">2. Test with HTTPS</button>
+        <button onclick="testDifferentPort()">3. Test Different Approach</button>
+        <button onclick="testImageLoad()">4. Test Image Load (No CORS)</button>
+        <button onclick="testJSONP()">5. Test JSONP</button>
+    </div>
+    
+    <div id="results"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+        function addResult(message, type) {
+            const div = document.createElement('div');
+            div.className = 'test-result ' + type;
+            div.innerHTML = '<strong>' + new Date().toLocaleTimeString() + '</strong>: ' + message;
+            document.getElementById('results').appendChild(div);
+            console.log(message);
+        }
+
+        function testBasicConnection() {
+            addResult('Testing basic HTTP connection...', 'warning');
+            
+            $.ajax({
+                url: 'http://inipressi.xyz/phpmailer/classes/postmailer_cors_fixed.php',
+                method: 'GET',
+                timeout: 10000,
+                success: function(data) {
+                    addResult('✅ HTTP connection successful!', 'success');
+                    console.log('Response:', data);
+                },
+                error: function(xhr, status, error) {
+                    addResult('❌ HTTP connection failed: ' + status + ' - ' + error + ' (Status: ' + xhr.status + ')', 'error');
+                    console.log('Error details:', xhr);
+                }
+            });
+        }
+
+        function testWithHTTPS() {
+            addResult('Testing HTTPS connection...', 'warning');
+            
+            $.ajax({
+                url: 'https://inipressi.xyz/phpmailer/classes/postmailer_cors_fixed.php',
+                method: 'GET',
+                timeout: 10000,
+                success: function(data) {
+                    addResult('✅ HTTPS connection successful!', 'success');
+                    console.log('Response:', data);
+                },
+                error: function(xhr, status, error) {
+                    addResult('❌ HTTPS connection failed: ' + status + ' - ' + error + ' (Status: ' + xhr.status + ')', 'error');
+                    console.log('Error details:', xhr);
+                }
+            });
+        }
+
+        function testDifferentPort() {
+            addResult('Testing connection with different headers...', 'warning');
+            
+            $.ajax({
+                url: 'http://inipressi.xyz/phpmailer/classes/postmailer_cors_fixed.php',
+                method: 'GET',
+                dataType: 'text', // Don't expect JSON
+                crossDomain: true,
+                timeout: 10000,
+                success: function(data) {
+                    addResult('✅ Alternative connection successful!', 'success');
+                    console.log('Response:', data);
+                },
+                error: function(xhr, status, error) {
+                    addResult('❌ Alternative connection failed: ' + status + ' - ' + error + ' (Status: ' + xhr.status + ')', 'error');
+                    console.log('Error details:', xhr);
+                }
+            });
+        }
+
+        function testImageLoad() {
+            addResult('Testing server reachability with image load...', 'warning');
+            
+            const img = new Image();
+            img.onload = function() {
+                addResult('✅ Server is reachable (image loaded)', 'success');
+            };
+            img.onerror = function() {
+                addResult('❌ Server not reachable (image failed)', 'error');
+            };
+            img.src = 'http://inipressi.xyz/favicon.ico?' + Date.now();
+        }
+
+        function testJSONP() {
+            addResult('Testing JSONP approach...', 'warning');
+            
+            window.jsonpCallback = function(data) {
+                addResult('✅ JSONP connection successful!', 'success');
+                console.log('JSONP Response:', data);
+            };
+            
+            const script = document.createElement('script');
+            script.src = 'http://inipressi.xyz/phpmailer/classes/postmailer_cors_fixed.php?callback=jsonpCallback&' + Date.now();
+            script.onerror = function() {
+                addResult('❌ JSONP connection failed', 'error');
+            };
+            document.head.appendChild(script);
+            
+            // Clean up after 5 seconds
+            setTimeout(function() {
+                document.head.removeChild(script);
+            }, 5000);
+        }
+
+        // Test fetch API as well
+        function testFetch() {
+            addResult('Testing Fetch API...', 'warning');
+            
+            fetch('http://inipressi.xyz/phpmailer/classes/postmailer_cors_fixed.php', {
+                method: 'GET',
+                mode: 'cors'
+            })
+            .then(response => {
+                if (response.ok) {
+                    addResult('✅ Fetch API successful!', 'success');
+                    return response.text();
+                }
+                throw new Error('HTTP ' + response.status);
+            })
+            .then(data => {
+                console.log('Fetch response:', data);
+            })
+            .catch(error => {
+                addResult('❌ Fetch API failed: ' + error.message, 'error');
+                console.log('Fetch error:', error);
+            });
+        }
+
+        // Auto-run basic tests
+        setTimeout(function() {
+            addResult('Starting automatic diagnostics...', 'warning');
+            testBasicConnection();
+            setTimeout(testWithHTTPS, 2000);
+            setTimeout(testImageLoad, 4000);
+        }, 1000);
+    </script>
+</body>
+</html>
