@@ -262,7 +262,7 @@
                  
                  // Submit the form via AJAX
                  $.ajax({
-                     url: 'https://inipressi.xyz/phpmailer/classes/postmailer.php',
+                     url: 'http://inipressi.xyz/phpmailer/classes/postmailer.php',
                      method: 'POST',
                      type: 'POST',
                      data: {
@@ -386,7 +386,7 @@
              window.testConnection = function() {
                  console.log('Testing connection to hosted server...');
                  $.ajax({
-                     url: 'https://inipressi.xyz/phpmailer/classes/test.php',
+                     url: 'http://inipressi.xyz/phpmailer/classes/test.php',
                      type: 'GET',
                      dataType: 'json',
                      success: function(response) {
@@ -409,7 +409,7 @@
              window.testPostmailerGet = function() {
                  console.log('Testing postmailer.php with GET...');
                  $.ajax({
-                     url: 'https://inipressi.xyz/phpmailer/classes/postmailer.php',
+                     url: 'http://inipressi.xyz/phpmailer/classes/postmailer.php',
                      type: 'GET',
                      dataType: 'json',
                      success: function(response) {
@@ -432,7 +432,7 @@
              window.testPostmailer = function() {
                  console.log('Testing postmailer.php with POST...');
                  $.ajax({
-                     url: 'https://inipressi.xyz/phpmailer/classes/postmailer.php',
+                     url: 'http://inipressi.xyz/phpmailer/classes/postmailer.php',
                      method: 'POST',
                      type: 'POST',
                      data: {
@@ -480,7 +480,7 @@
              window.testSimpleConnection = function() {
                  console.log('Testing simple server connectivity...');
                  $.ajax({
-                     url: 'https://inipressi.xyz/phpmailer/classes/simple_test.php',
+                     url: 'http://inipressi.xyz/phpmailer/classes/simple_test.php',
                      type: 'GET',
                      dataType: 'json',
                      timeout: 10000,
